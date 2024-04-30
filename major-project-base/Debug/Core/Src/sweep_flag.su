@@ -1,0 +1,2 @@
+../Core/Src/sweep_flag.c:5:9:get_sweep_flag	4	static
+../Core/Src/sweep_flag.c:10:6:set_sweep_flag	16	static
