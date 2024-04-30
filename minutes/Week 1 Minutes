@@ -1,0 +1,21 @@
+# MTRX Group #? - "Killer Group Name"
+##  Date – 23/04/2024
+### Present:
+- Jeremy
+- Jono
+- Sean
+- Ethan
+### Apologies:
+-	Krish - Sick
+
+### Meeting Purpose:
+-	Meet the group
+-	Generate ideas
+-	Test major failing point to see if idea is viable 
+(Check whether lidar unit can accurately detect a person up to 8m)
+### New Items:
+- Write basic code to test lidar code (Jeremy)
+- Get the timer module working with a new callback method (no implementation yet)(Sean)
+- Interface the serial module with python to rx/tx (no implementation yet) (Sean)
+### Next Meeting Date:
+30/04/2024
