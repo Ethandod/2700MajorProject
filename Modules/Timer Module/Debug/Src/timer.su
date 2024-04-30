@@ -1,0 +1,13 @@
+C:/GitHub/MTRX2700A2/stm32f303-definitions/Core/Inc/core_cm4.h:1688:22:__NVIC_EnableIRQ	16	static
+C:/GitHub/MTRX2700A2/stm32f303-definitions/Core/Inc/core_cm4.h:1816:22:__NVIC_SetPriority	16	static
+../Src/timer.c:17:6:timerInitialise	8	static
+../Src/timer.c:24:6:enableTimer	8	static
+../Src/timer.c:35:6:triggerPrescaler	4	static
+../Src/timer.c:42:6:enableInterrupts	8	static,ignoring_inline_asm
+../Src/timer.c:57:6:TIM2_IRQHandler	8	static
+../Src/timer.c:64:6:timerHandler	8	static
+../Src/timer.c:81:10:get_delay	4	static
+../Src/timer.c:86:6:resetTimer	16	static
+../Src/timer.c:93:6:stopTimer	4	static
+../Src/timer.c:98:6:setDelayLoop	16	static
+../Src/timer.c:104:6:setDelay	16	static
