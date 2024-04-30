@@ -3,105 +3,138 @@
 #include "timer.h"
 
 // "Private" function declarations
-void enableTimer();
-void triggerPrescaler();
-void enableInterrupts();
-void timerHandler();
-void resetTimer(uint32_t delay_ms);
+void enableTimer(DelayTIM *delay_timer);
+void triggerPrescaler(DelayTIM *delay_timer);
+void enableInterrupts(DelayTIM *delay_timer);
+void timerHandler(DelayTIM *delay_timer);
+void resetTimer(DelayTIM *delay_timer, uint32_t delay_ms);
 
-//  Variable definitions
-void (*callback_ptr)(void) = NULL;
-bool is_loop = NULL;
+struct _DelayTIM {
+	TIM_TypeDef *TIM;
+	volatile uint32_t MaskAPB2ENR;	// mask to enable RCC APB2 bus registers
+	volatile uint32_t MaskAPB1ENR;	// mask to enable RCC APB1 bus registers
+	volatile uint32_t TIM_IRQn;		// IRQN for the specific timer
+	void (*callback_ptr)(void);     // Function pointer for callback
+	bool is_loop;                   // Flag indicating if the current timer should loop
+	bool enabled;					// Flag indicating if TIM is used in this code section
+};
 
-void timerInitialise()
-{
-	// Enable appropriate functions
-	enableTimer();
-	enableInterrupts();
+void TIM2_IRQHandler() {if (DelayTIM2.enabled) {timerHandler(&DelayTIM2);}}
+DelayTIM DelayTIM2 = {
+		.TIM = TIM2,
+		.MaskAPB2ENR = 0x00,
+		.MaskAPB1ENR = RCC_APB1ENR_TIM2EN,
+		.TIM_IRQn = TIM2_IRQn,
+		.callback_ptr = NULL,
+		.is_loop = NULL,
+		.enabled = false
+	};
+
+
+void TIM3_IRQHandler() {if (DelayTIM3.enabled) {timerHandler(&DelayTIM3);}}
+DelayTIM DelayTIM3 = {
+		.TIM = TIM3,
+		.MaskAPB2ENR = 0x00,
+		.MaskAPB1ENR = RCC_APB1ENR_TIM3EN,
+		.TIM_IRQn = TIM3_IRQn,
+		.callback_ptr = NULL,
+		.is_loop = NULL,
+		.enabled = false
+	};
+
+
+void TIM4_IRQHandler() {if (DelayTIM4.enabled) {timerHandler(&DelayTIM4);}}
+DelayTIM DelayTIM4 = {
+		.TIM = TIM4,
+		.MaskAPB2ENR = 0x00,
+		.MaskAPB1ENR = RCC_APB1ENR_TIM4EN,
+		.TIM_IRQn = TIM4_IRQn,
+		.callback_ptr = NULL,
+		.is_loop = NULL,
+		.enabled = false
+	};
+
+void timerHandler(DelayTIM *delay_timer) {
+    delay_timer->TIM->SR &= ~TIM_SR_UIF;
+	if (delay_timer->callback_ptr == NULL) {
+		stopTimer(delay_timer);
+		return;
+	}
+	if (delay_timer->is_loop) {
+		delay_timer->callback_ptr();
+		return;
+	}
+	if (!delay_timer->is_loop){
+		stopTimer(delay_timer);
+		delay_timer->callback_ptr();
+		return;
+	}
 }
 
-void enableTimer()
+void timerInitialise(DelayTIM *delay_timer)
 {
-	// Enable the clock for Timer 2
-	RCC->AHBENR |= RCC_AHBENR_GPIOAEN | RCC_AHBENR_GPIOCEN | RCC_AHBENR_GPIOEEN;
-	RCC->APB1ENR |= RCC_APB1ENR_TIM2EN;
-	TIM2->PSC = 0x1F3F; // 7999
-	TIM2->CR1 |= TIM_CR1_CEN;
-	triggerPrescaler();
+	// Enable appropriate functions
+	enableTimer(delay_timer);
+	enableInterrupts(delay_timer);
+}
+
+void enableTimer(DelayTIM *delay_timer)
+{
+	// Enable the clock for timer
+	RCC->APB1ENR |= delay_timer->MaskAPB1ENR;
+	delay_timer->TIM->PSC = 0x1F3F; // 7999
+	delay_timer->TIM->CR1 |= TIM_CR1_CEN;
+	triggerPrescaler(delay_timer);
+	delay_timer->enabled = true;
 }
 
 // Pre-scaler updates only upon "events" so this triggers an overflow
-void triggerPrescaler()
+void triggerPrescaler(DelayTIM *delay_timer)
 {
-	TIM2->ARR = 0x01;
-	TIM2->CNT = 0x00;
-	TIM2->ARR = 0xFFFFFFFF;
+	delay_timer->TIM->ARR = 0x01;
+	delay_timer->TIM->CNT = 0x00;
+	delay_timer->TIM->ARR = 0xFFFFFFFF;
 }
 
-void enableInterrupts()
+void enableInterrupts(DelayTIM *delay_timer)
 {
 	__disable_irq();
 
     // Enable the update interrupt
-	TIM2->CR1 |=
-    TIM2->DIER |= TIM_DIER_UIE;
+    delay_timer->TIM->DIER |= TIM_DIER_UIE;
 
 	// Set priority and enable interrupts
-	NVIC_SetPriority(TIM2_IRQn, 1);
-	NVIC_EnableIRQ(TIM2_IRQn);
+	NVIC_SetPriority(delay_timer->TIM_IRQn, 1);
+	NVIC_EnableIRQ(delay_timer->TIM_IRQn);
 
 	__enable_irq();
 }
 
-void TIM2_IRQHandler()
+uint32_t get_delay(DelayTIM *delay_timer)
 {
-	if ((TIM2->SR & TIM_SR_UIF) != 0) {
-		timerHandler();
-	}
+    return delay_timer->TIM->ARR;
 }
 
-void timerHandler() {
-    TIM2->SR &= ~TIM_SR_UIF;
-	if (callback_ptr == NULL) {
-		stopTimer();
-		return;
-	}
-	if (is_loop) {
-		callback_ptr();
-		return;
-	}
-	if (!is_loop){
-		stopTimer();
-		callback_ptr();
-		return;
-	}
+void resetTimer(DelayTIM *delay_timer, uint32_t delay_ms) {
+	stopTimer(delay_timer);
+    delay_timer->TIM->ARR = delay_ms;
+	delay_timer->TIM->CR1 |= TIM_CR1_CEN;
+	delay_timer->TIM->SR &= ~TIM_SR_UIF;
 }
 
-uint32_t get_delay()
-{
-    return TIM2->ARR;
+void stopTimer(DelayTIM *delay_timer) {
+	delay_timer->TIM->CR1 &= ~TIM_CR1_CEN;
+	delay_timer->TIM->CNT = 0x00;
 }
 
-void resetTimer(uint32_t delay_ms) {
-	stopTimer();
-    TIM2->ARR = delay_ms;
-	TIM2->CR1 |= TIM_CR1_CEN;
-	TIM2->SR &= ~TIM_SR_UIF;
+void setDelayLoop(DelayTIM *delay_timer, uint32_t delay_ms, void (*callback)(void)) {
+	delay_timer->callback_ptr = callback;
+	delay_timer->is_loop = true;
+	resetTimer(delay_timer, delay_ms);
 }
 
-void stopTimer() {
-	TIM2->CR1 &= ~TIM_CR1_CEN;
-	TIM2->CNT = 0x00;
-}
-
-void setDelayLoop(uint32_t delay_ms, void (*callback)(void)) {
-	callback_ptr = callback;
-	is_loop = true;
-	resetTimer(delay_ms);
-}
-
-void setDelay(uint32_t delay_ms, void (*callback)(void)) {
-	callback_ptr = callback;
-	is_loop = false;
-	resetTimer(delay_ms);
+void setDelay(DelayTIM *delay_timer, uint32_t delay_ms, void (*callback)(void)) {
+	delay_timer->callback_ptr = callback;
+	delay_timer->is_loop = false;
+	resetTimer(delay_timer, delay_ms);
 }

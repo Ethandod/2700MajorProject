@@ -11,23 +11,38 @@ void enableLEDs()
 	*led_output_registers = 0x5555;
 }
 
-void toggleLEDs() {
-	*(((uint8_t*)&(GPIOE->ODR)) + 1) = ~(*(((uint8_t*)&(GPIOE->ODR)) + 1));
+void toggleLEDs(uint8_t bitmap) {
+	*(((uint8_t*)&(GPIOE->ODR)) + 1) = (*(((uint8_t*)&(GPIOE->ODR)) + 1)) ^ bitmap;
 }
 
-void timer_callback(void){
-	toggleLEDs();
+void timer_callback1(void){
+	toggleLEDs(0b00000001);
 }
 
+void timer_callback2(void){
+	toggleLEDs(0b00000010);
+}
+
+void timer_callback3(void){
+	toggleLEDs(0b00000100);
+}
 
 int main(void)
 {
-	timerInitialise();
+	DelayTIM *timer1 = &DelayTIM2;
+	DelayTIM *timer2 = &DelayTIM3;
+	DelayTIM *timer3 = &DelayTIM4;
+
+	timerInitialise(timer1);
+	timerInitialise(timer2);
+	timerInitialise(timer3);
+
 	enableLEDs();
-	toggleLEDs();
+	toggleLEDs(0b11111111);
  
-	//setDelayLoop(2000, &timer_callback);
-	setDelay(2000, &timer_callback);
+	setDelayLoop(timer1, 1000, &timer_callback1);
+	setDelayLoop(timer2, 2000, &timer_callback2);
+	setDelayLoop(timer3, 3000, &timer_callback3);
 	while(1)
 	{
 	}

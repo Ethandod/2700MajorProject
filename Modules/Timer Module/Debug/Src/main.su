@@ -1,4 +1,6 @@
 ../Src/main.c:6:6:enableLEDs	16	static
-../Src/main.c:14:6:toggleLEDs	4	static
-../Src/main.c:18:6:timer_callback	8	static
-../Src/main.c:23:5:main	8	static
+../Src/main.c:14:6:toggleLEDs	16	static
+../Src/main.c:18:6:timer_callback1	8	static
+../Src/main.c:22:6:timer_callback2	8	static
+../Src/main.c:26:6:timer_callback3	8	static
+../Src/main.c:30:5:main	24	static
