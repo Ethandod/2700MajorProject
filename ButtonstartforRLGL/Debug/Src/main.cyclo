@@ -1,0 +1,4 @@
+../Src/main.c:22:6:enable_clocks	1
+../Src/main.c:27:6:initGame	1
+../Src/main.c:32:6:interrupt_LEDs	1
+../Src/main.c:37:5:main	1

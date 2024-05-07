@@ -1,0 +1,2 @@
+../Src/buttonhandler.c:11:6:initButtonHandler	16	static
+../Src/buttonhandler.c:17:6:updateButtonState	16	static

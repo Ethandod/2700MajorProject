@@ -1,0 +1,4 @@
+../Src/main.c:22:6:enable_clocks	4	static
+../Src/main.c:27:6:initGame	4	static
+../Src/main.c:32:6:interrupt_LEDs	4	static
+../Src/main.c:37:5:main	8	static
