@@ -1,0 +1,4 @@
+../Src/LaptopInterface.c:9:6:checkStop	2
+../Src/LaptopInterface.c:15:6:laptopInterfaceInitialise	1
+../Src/LaptopInterface.c:20:6:setLaptopGreen	1
+../Src/LaptopInterface.c:26:6:setLaptopRed	1
