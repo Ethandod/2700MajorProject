@@ -1,0 +1,12 @@
+#include "pot.h"
+
+extern ADC_HandleTypeDef hadc1;
+
+void Potentiometer_Init(void) {
+    HAL_ADC_Start(&hadc1);
+}
+
+//uint32_t Potentiometer_Read(void) {
+//    HAL_ADC_PollForConversion(&hadc1, 1000);
+//    return HAL_ADC_GetValue(&hadc1);
+}
