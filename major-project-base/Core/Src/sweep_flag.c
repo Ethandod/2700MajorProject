@@ -1,18 +1,38 @@
 #include "sweep_flag.h"
 
-volatile uint8_t sweep_flag = 0;
+uint32_t status = SETUP;
 
-uint8_t get_sweep_flag()
+uint32_t get_status()
 {
-	return sweep_flag;
+	return status;
 }
 
-void set_sweep_flag(uint8_t status)
+void set_setup()
 {
-	if (status != 0 && status != 1)
-	{
-		return;
-	}
-	sweep_flag = status;
+	status = SETUP;
+	return;
+}
+
+void set_green()
+{
+	status = GREEN;
+	return;
+}
+
+void set_red()
+{
+	status = RED;
+	return;
+}
+
+void set_detected()
+{
+	status = DETECTED;
+	return;
+}
+
+void set_finished()
+{
+	status = FINISHED;
 	return;
 }

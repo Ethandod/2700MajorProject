@@ -1,39 +1,41 @@
 #include "buttonhandler.h"
+#include "stm32f303xc.h"
 
-void (*buttonCallback)(void);
+// store a pointer to the function that is called when a button is pressed
+// set a default value of NULL so that it won't be called until the
+// function pointer is defined
+static void (*on_button_press)() = 0x00;
 
-void initButtonHandler(void (*callback)(void))
+void enable_interrupt()
 {
-    buttonCallback = callback;
+    __disable_irq();
 
-    // Enable clock for SYSCFG
     RCC->APB2ENR |= RCC_APB2ENR_SYSCFGEN;
 
-    // Configure PA0 as input
-    GPIOA->MODER &= ~GPIO_MODER_MODER0_Msk;
+    SYSCFG->EXTICR[0] = SYSCFG_EXTICR1_EXTI0_PA;
 
-    // Configure PA0 for external interrupt
-    SYSCFG->EXTICR[0] |= SYSCFG_EXTICR1_EXTI0_PA;
-
-    // Enable rising edge trigger for EXTI0
     EXTI->RTSR |= EXTI_RTSR_TR0;
-
-    // Enable EXTI0 interrupt
     EXTI->IMR |= EXTI_IMR_MR0;
 
-    // Enable NVIC IRQ for EXTI0
+    NVIC_SetPriority(EXTI0_IRQn, -1);
     NVIC_EnableIRQ(EXTI0_IRQn);
+
+    __enable_irq();
+}
+
+void initButtonHandler(ButtonPressCallback callback)
+{
+    on_button_press = callback;
 }
 
 void EXTI0_IRQHandler(void)
 {
-    if (EXTI->PR & EXTI_PR_PR0)
+    // run the button press handler (make sure it is not null first !)
+    if (on_button_press != 0x00)
     {
-        EXTI->PR |= EXTI_PR_PR0; // Clear the pending bit
-
-        if (buttonCallback != NULL)
-        {
-            buttonCallback();
-        }
+        on_button_press();
     }
+
+    // reset the interrupt (so it doesn't keep firing until the next trigger)
+    EXTI->PR |= EXTI_PR_PR0;
 }

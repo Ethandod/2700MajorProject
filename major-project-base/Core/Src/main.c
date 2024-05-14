@@ -27,6 +27,7 @@
 #include "serial.h"
 #include "lidar_sweep.h"
 #include "sweep_flag.h"
+#include "timer.h"
 
 #include "math.h"
 
@@ -73,7 +74,50 @@ static void MX_TIM1_Init(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
+
+void green_routine();
+void red_routine();
+
 /* USER CODE BEGIN 0 */
+void enable_clocks()
+{
+    RCC->AHBENR |= RCC_AHBENR_GPIOAEN | RCC_AHBENR_GPIOCEN | RCC_AHBENR_GPIOEEN;
+}
+
+void green_routine()
+{
+	set_green();
+	// get pot value
+	// set display to be green
+	// wait proportional to pot value
+	//HAL_Delay(1000);
+	// set oneshot timer to end sweep
+	setDelay(&DelayTIM4, 100000, &red_routine);
+
+}
+
+void red_routine()
+{
+	set_red();
+	// get pot value
+	// set display to be green
+	// wait proportional to pot value
+	//HAL_Delay(1000);
+	// set oneshot timer to end sweep
+	setDelay(&DelayTIM4, 3000, &green_routine);
+}
+
+void setup_routine()
+{
+	set_setup();
+	setup_sweeper(&hi2c1, &hspi1, &htim1, &htim2, &hpcd_USB_FS);
+	timerInitialise(&DelayTIM4);
+	enable_interrupt();
+	enable_clocks();
+	initButtonHandler(&green_routine);
+}
+
+
 
 /* USER CODE END 0 */
 
@@ -126,13 +170,31 @@ int main(void)
 	/* Infinite loop */
 	/* USER CODE BEGIN WHILE */
 
-	setup_sweeper(&hi2c1, &hspi1, &htim1, &htim2, &hpcd_USB_FS);
 
-	set_sweep_flag(1);
-	sweep_routine();
 
+
+	setup_routine();
 	while (1)
 	{
+		if (get_status() == FINISHED)
+		{
+			stopTimer(&DelayTIM4);
+			// display victory message?
+		}
+		else if (get_status() == SETUP)
+		{
+			// display pre-game message?
+		}
+		else if (get_status() == RED)
+		{
+			// set display to be red
+			sweep_routine();
+		}
+		else if (get_status() == DETECTED)
+		{
+			HAL_Delay(1);
+			// while status is detected activate the buzzer
+		}
 
 
 	/* USER CODE END WHILE */

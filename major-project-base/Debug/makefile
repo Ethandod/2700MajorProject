@@ -34,34 +34,34 @@ $(wildcard ../makefile.init) \
 $(wildcard ../makefile.targets) \
 
 
-BUILD_ARTIFACT_NAME := major-project-base
+BUILD_ARTIFACT_NAME := sweeper
 BUILD_ARTIFACT_EXTENSION := elf
 BUILD_ARTIFACT_PREFIX :=
 BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ARTIFACT_EXTENSION),.$(BUILD_ARTIFACT_EXTENSION),)
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXECUTABLES += \
-major-project-base.elf \
+sweeper.elf \
 
 MAP_FILES += \
-major-project-base.map \
+sweeper.map \
 
 SIZE_OUTPUT += \
 default.size.stdout \
 
 OBJDUMP_LIST += \
-major-project-base.list \
+sweeper.list \
 
 
 # All Target
 all: main-build
 
 # Main-build Target
-main-build: major-project-base.elf secondary-outputs
+main-build: sweeper.elf secondary-outputs
 
 # Tool invocations
-major-project-base.elf major-project-base.map: $(OBJS) $(USER_OBJS) /Users/jeremyfox/Desktop/MTRX2700-2024-main\ 2/major-project-base/STM32F303VCTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "major-project-base.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/Users/jeremyfox/Desktop/MTRX2700-2024-main 2/major-project-base/STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="major-project-base.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+sweeper.elf sweeper.map: $(OBJS) $(USER_OBJS) /Users/jeremyfox/Documents/USYD/2024\ SEM\ 1/MTRX2700/Labs/2700MajorProject/major-project-base/STM32F303VCTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "sweeper.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/Users/jeremyfox/Documents/USYD/2024 SEM 1/MTRX2700/Labs/2700MajorProject/major-project-base/STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="sweeper.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -70,14 +70,14 @@ default.size.stdout: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-major-project-base.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "major-project-base.list"
+sweeper.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "sweeper.list"
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) default.size.stdout major-project-base.elf major-project-base.list major-project-base.map
+	-$(RM) default.size.stdout sweeper.elf sweeper.list sweeper.map
 	-@echo ' '
 
 secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)

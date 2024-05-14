@@ -1,2 +1,6 @@
-../Core/Src/sweep_flag.c:5:9:get_sweep_flag	4	static
-../Core/Src/sweep_flag.c:10:6:set_sweep_flag	16	static
+../Core/Src/sweep_flag.c:5:10:get_status	4	static
+../Core/Src/sweep_flag.c:10:6:set_setup	4	static
+../Core/Src/sweep_flag.c:16:6:set_green	4	static
+../Core/Src/sweep_flag.c:22:6:set_red	4	static
+../Core/Src/sweep_flag.c:28:6:set_detected	4	static
+../Core/Src/sweep_flag.c:34:6:set_finished	4	static

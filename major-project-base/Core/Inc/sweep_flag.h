@@ -3,8 +3,26 @@
 
 #include <stdint.h>
 
-uint8_t get_sweep_flag();
+enum
+{
+	SETUP,
+	GREEN,
+	RED,
+	DETECTED,
+	FINISHED
+};
 
-void set_sweep_flag(uint8_t status);
+uint32_t get_status();
+
+void set_setup();
+
+void set_green();
+
+void set_red();
+
+void set_detected();
+
+void set_finished();
+
 
 #endif

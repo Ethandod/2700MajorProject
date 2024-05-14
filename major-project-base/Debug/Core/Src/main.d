@@ -34,7 +34,8 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_tim_ex.h \
  ../Core/Inc/ptu_definitions.h ../Core/Inc/ptu_i2c.h ../Core/Inc/serial.h \
  ../Core/Inc/lidar_sweep.h ../Core/Inc/serial.h ../Core/Inc/sweep_flag.h \
- ../Core/Inc/sweep_flag.h
+ ../Core/Inc/sweep_flag.h ../Core/Inc/timer.h \
+ ../Drivers/CMSIS/Device/ST/STM32F3xx/Include/stm32f303xc.h
 ../Core/Inc/main.h:
 ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal.h:
 ../Core/Inc/stm32f3xx_hal_conf.h:
@@ -76,3 +77,5 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Core/Inc/serial.h:
 ../Core/Inc/sweep_flag.h:
 ../Core/Inc/sweep_flag.h:
+../Core/Inc/timer.h:
+../Drivers/CMSIS/Device/ST/STM32F3xx/Include/stm32f303xc.h:

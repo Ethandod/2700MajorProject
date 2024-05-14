@@ -1,10 +1,17 @@
-#ifndef BUTTONHANDLER_H
-#define BUTTONHANDLER_H
+#ifndef BUTTON_HANDLER_H
+#define BUTTON_HANDLER_H
 
-#include "stm32f303xc.h"
-#include <stddef.h>
+#include <stdint.h>
 
-void initButtonHandler(void (*callback)(void));
+// Define the callback function type
+typedef void (*ButtonPressCallback)(void);
+
+void enable_interrupt();
+
+// Function to initialize the button handler module
+void initButtonHandler(ButtonPressCallback callback);
+
+// Function to handle the button press interrupt
 void EXTI0_IRQHandler(void);
 
-#endif /* BUTTONHANDLER_H */
+#endif /* BUTTON_HANDLER_H */
