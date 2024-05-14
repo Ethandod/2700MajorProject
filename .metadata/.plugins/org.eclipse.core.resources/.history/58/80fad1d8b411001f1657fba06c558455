@@ -1,0 +1,9 @@
+#ifndef POT_H
+#define POT_H
+
+#include "main.h"
+
+void Potentiometer_Init(void);
+uint32_t Potentiometer_Read(void);
+
+#endif // POT_H

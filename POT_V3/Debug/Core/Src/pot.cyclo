@@ -1,0 +1,2 @@
+../Core/Src/pot.c:5:6:Potentiometer_Init	1
+../Core/Src/pot.c:9:10:Potentiometer_Read	1

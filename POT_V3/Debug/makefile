@@ -60,8 +60,8 @@ all: main-build
 main-build: POT_V3.elf secondary-outputs
 
 # Tool invocations
-POT_V3.elf POT_V3.map: $(OBJS) $(USER_OBJS) /Users/krish/Downloads/potentiometer/POT_V3/STM32F303VCTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "POT_V3.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/Users/krish/Downloads/potentiometer/POT_V3/STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="POT_V3.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+POT_V3.elf POT_V3.map: $(OBJS) $(USER_OBJS) /Users/krish/Downloads/2700MajorProject/POT_V3/STM32F303VCTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "POT_V3.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/Users/krish/Downloads/2700MajorProject/POT_V3/STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="POT_V3.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

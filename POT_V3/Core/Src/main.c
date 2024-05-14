@@ -1,4 +1,4 @@
-
+#include "pot.h"
 #include "main.h"
 
 ADC_HandleTypeDef hadc1;
@@ -26,7 +26,9 @@ static void MX_ADC1_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-uint16_t readValue;
+
+uint32_t readValue;
+
 /* USER CODE END 0 */
 
 /**
@@ -62,6 +64,9 @@ int main(void)
   MX_SPI1_Init();
   MX_USB_PCD_Init();
   MX_ADC1_Init();
+
+  Potentiometer_Init();
+
   /* USER CODE BEGIN 2 */
   HAL_ADC_Start(&hadc1);
   /* USER CODE END 2 */
@@ -71,9 +76,9 @@ int main(void)
   while (1)
   {
 
-
-	  HAL_ADC_PollForConversion(&hadc1,1000);
-	  	readValue = HAL_ADC_GetValue(&hadc1);
+	  readValue = Potentiometer_Read();
+//	  HAL_ADC_PollForConversion(&hadc1,1000);
+//	  	readValue = HAL_ADC_GetValue(&hadc1);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
