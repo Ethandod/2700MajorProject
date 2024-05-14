@@ -1,17 +1,15 @@
 # MTRX Group #? - "REDLIGHTGREENLIGHT"
-##  Date – 07/05/2024
+##  Date – 14/05/2024
 ### Present:
 - Jeremy
 - Sean
 - Ethan
 - Krish
-### Apologies:
--	Jono - Sick
+
 ### Meeting Purpose:
 -	Seeing what everyone has gotten up to for the modules that were assigned
--	Integrating button activation and lidar module
-- Attach laser to Lidar
+-	Integrating timer, piezo buzzer modules
 ### New Items:
-- Integrate serial and timer modules
+- Integrate serial and potentiometer modules
 ### Next Meeting Date:
-14/05/2024
+21/05/2024
