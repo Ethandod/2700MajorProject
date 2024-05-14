@@ -3,7 +3,6 @@ from threading import *
 import sys
 import glob
 from serial import Serial, SerialException
-import time
 
 # Function to list serial ports
 def serial_ports():
