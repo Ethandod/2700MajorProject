@@ -88,7 +88,6 @@ void red_routine();
 /* USER CODE BEGIN 0 */
 
 
-
 void enableLEDs()
 {
 	RCC->AHBENR |= RCC_AHBENR_GPIOEEN;
@@ -120,7 +119,7 @@ void green_routine()
 	//uint32_t readValue = Potentiometer_Read();
 	toggle();
 	setLaptopGreen();
-	setDelay(&DelayTIM4, 1000, &red_routine);
+	setDelay(&DelayTIM4, 5000, &red_routine);
 	set_green();
 }
 
@@ -133,13 +132,17 @@ void red_routine()
 	// wait proportional to pot value
 	//HAL_Delay(1000);
 	// set oneshot timer to end sweep
-	uint32_t readValue = Potentiometer_Read();
-	setDelay(&DelayTIM4, 1000, &green_routine);
+	//uint32_t readValue = Potentiometer_Read();
+//	uint32_t cleanedValue;
+//	cleanedValue = (readvalue/4294967296)
+
+	setDelay(&DelayTIM4, 20000, &green_routine);
 	toggle();
+
 }
 
 void finished_routine() {
-	stopTimer();
+	stopTimer(&DelayTIM4);
 	set_finished();
 	return;
 }
@@ -221,8 +224,7 @@ int main(void)
 	setup_routine();
 	//toggleBuzzer(hdac);
 	while (1) {
-
-
+		uint32_t readValue = Potentiometer_Read();
 		switch(get_status()) {
 			case FINISHED:
 				stopTimer(&DelayTIM4);
@@ -233,9 +235,16 @@ int main(void)
 				sweep_routine();
 				break;
 			case DETECTED:
-				HAL_Delay(1);
+				if (get_buzzer() == 0)
+				{
+					toggleBuzzer(hdac);
+				}
 				break;
 			case GREEN:
+				if (get_buzzer() == 1)
+				{
+					toggleBuzzer(hdac);
+				}
 				break;
 		}
 

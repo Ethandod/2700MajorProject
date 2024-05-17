@@ -23,6 +23,9 @@ class Window:
         print(data)
         self.window.fill((255, 0, 0))
 
+    def setBlue(self):
+        self.window.fill((0, 0, 255))
+
     def run(self):
         while self.running:
             for event in pygame.event.get():
@@ -30,6 +33,7 @@ class Window:
                     self.running = False
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                     port.sendMessage("stop\0")
+                    self.setBlue()
                     
             
             pygame.display.flip()

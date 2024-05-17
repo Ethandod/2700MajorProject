@@ -89,16 +89,16 @@ void serialInitialise(uint32_t buffer_size,
 	// Baud rate calculation from datasheet
 	switch(baudRate){
 	case BAUD_9600:
-		*baud_rate_config = 0x341/6;  // 9600 at 8MHz
+		*baud_rate_config = 0x341 * 6;  // 9600 at 8MHz
 		break;
 	case BAUD_19200:
-		*baud_rate_config = 0x1A1/6;  // 19200 at 8MHz
+		*baud_rate_config = 0x1A1 * 6;  // 19200 at 8MHz
 		break;
 	case BAUD_38400:
-		*baud_rate_config = 0xD0;  // 38400 at 8MHz
+		*baud_rate_config = 0xD0 * 6;  // 38400 at 8MHz
 		break;
 	case BAUD_57600:
-		*baud_rate_config = 0x8B;  // 57600 at 8MHz
+		*baud_rate_config = 0x8B * 6;  // 57600 at 8MHz
 		break;
 	case BAUD_115200:
 		*baud_rate_config = 0x46 * 6;  // 115200 at 8MHz
