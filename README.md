@@ -70,15 +70,21 @@ This handles the buttons that are used for activation of the game, resetting the
   - `initButtonHandler`: Initialising the button so that when a function is called to it, it activates that function.
 
 
+### Lidar/Sweeper Module:
+This module handles the pan tilt unit and the lidar so that it is able to sweep the room, then using the lidar it can detect movement.
+#### `sweep_flag.c`
+- **Key Functions:**
+  - `ProgrammeStatus`: Gets the status of the program whether it is GREEN, RED, DETECTED or FINISHED
+#### `lidar_sweep.c`
+  - `setup_sweeper`: 
+  - `sweep_routine`: 
+
 
 ### Integration
 
 
-#### `main.h`
-Contains declarations and static variables used across the main application, particularly for managing the state of initialization and timer modes. Includes flags for initialization status and timer modes to manage application flow and interactions.
-
 #### `main.c`
-Acts as the central hub of the application, orchestrating the initialization and handling of Passes incoming serial data to execute commands like setting LED patterns, echoing strings, and configuring timers.
+Acts as the central hub of the application, orchestrating the initialization and handling of Passes incoming data to execute commands like setting LED patterns, echoing strings, and configuring timers.
 
 
 
