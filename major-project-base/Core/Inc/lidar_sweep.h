@@ -25,15 +25,20 @@
 //#define BREACHES 3
 //#define RESET_DELAY_FACTOR 2
 //#define SWEEP_DELAY_FACTOR 20
+//
+//#define THRESHOLD_VALUE 100
+//#define BREACHES 5
+//#define RESET_DELAY_FACTOR 2
+//#define SWEEP_DELAY_FACTOR 5
 
 #define THRESHOLD_VALUE 100
 #define BREACHES 5
 #define RESET_DELAY_FACTOR 2
-#define SWEEP_DELAY_FACTOR 10
+#define SWEEP_DELAY_FACTOR 5
 
 void setup_sweeper();
 
-void sweep_routine();
+void sweep_routine(void (*callback)());
 
 #endif
 

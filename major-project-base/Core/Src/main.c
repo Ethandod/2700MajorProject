@@ -65,6 +65,8 @@ PCD_HandleTypeDef hpcd_USB_FS;
 
 /* USER CODE BEGIN PV */
 
+#define MAX_WAIT 1000
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -87,6 +89,12 @@ void red_routine();
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
+uint32_t get_cleaned_pot()
+{
+	uint32_t readValue = Potentiometer_Read();
+	uint32_t delayTime  = readValue / 2.8 + 640;
+	return delayTime;
+}
 
 void enableLEDs()
 {
@@ -119,7 +127,7 @@ void green_routine()
 	//uint32_t readValue = Potentiometer_Read();
 	toggle();
 	setLaptopGreen();
-	setDelay(&DelayTIM4, 5000, &red_routine);
+	setDelay(&DelayTIM4, get_cleaned_pot(), &red_routine);
 	set_green();
 }
 
@@ -136,9 +144,14 @@ void red_routine()
 //	uint32_t cleanedValue;
 //	cleanedValue = (readvalue/4294967296)
 
-	setDelay(&DelayTIM4, 20000, &green_routine);
+	setDelay(&DelayTIM4, 3 * get_cleaned_pot(), &green_routine);
 	toggle();
 
+}
+
+void detected_routine() {
+	stopTimer(&DelayTIM4);
+	set_detected();
 }
 
 void finished_routine() {
@@ -232,7 +245,7 @@ int main(void)
 			case SETUP:
 				break;
 			case RED:
-				sweep_routine();
+				sweep_routine(&detected_routine);
 				break;
 			case DETECTED:
 				if (get_buzzer() == 0)
