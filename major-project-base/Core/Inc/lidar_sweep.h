@@ -4,9 +4,9 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <math.h>
+#include <Serial.h>
 
 #include "stm32f3xx.h"
-#include "serial.h"
 #include "sweep_flag.h"
 
 // UNIVERSAL CONSTANTS

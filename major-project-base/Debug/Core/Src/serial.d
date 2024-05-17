@@ -1,4 +1,4 @@
-Core/Src/serial.o: ../Core/Src/serial.c ../Core/Inc/serial.h \
+Core/Src/Serial.o: ../Core/Src/Serial.c ../Core/Inc/serial.h \
  ../Drivers/CMSIS/Device/ST/STM32F3xx/Include/stm32f303xc.h \
  ../Drivers/CMSIS/Include/core_cm4.h \
  ../Drivers/CMSIS/Include/cmsis_version.h \

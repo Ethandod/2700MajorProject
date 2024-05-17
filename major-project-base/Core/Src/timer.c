@@ -65,6 +65,7 @@ void timerHandler(DelayTIM *delay_timer) {
 		return;
 	}
 	if (!delay_timer->is_loop){
+		uint32_t num = delay_timer->TIM->CNT;
 		stopTimer(delay_timer);
 		delay_timer->callback_ptr();
 		return;
@@ -82,7 +83,7 @@ void enableTimer(DelayTIM *delay_timer)
 {
 	// Enable the clock for timer
 	RCC->APB1ENR |= delay_timer->MaskAPB1ENR;
-	delay_timer->TIM->PSC = 0x1F3F; // 7999
+	delay_timer->TIM->PSC = 47999;
 	delay_timer->TIM->CR1 |= TIM_CR1_CEN;
 	triggerPrescaler(delay_timer);
 	delay_timer->enabled = true;
@@ -104,7 +105,7 @@ void enableInterrupts(DelayTIM *delay_timer)
     delay_timer->TIM->DIER |= TIM_DIER_UIE;
 
 	// Set priority and enable interrupts
-	NVIC_SetPriority(delay_timer->TIM_IRQn, 1);
+	NVIC_SetPriority(delay_timer->TIM_IRQn, 100);
 	NVIC_EnableIRQ(delay_timer->TIM_IRQn);
 
 	__enable_irq();

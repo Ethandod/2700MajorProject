@@ -24,12 +24,12 @@
 
 #include "ptu_definitions.h"
 #include "ptu_i2c.h"
-#include "serial.h"
 #include "lidar_sweep.h"
 #include "sweep_flag.h"
 #include "timer.h"
-
 #include "math.h"
+#include "buzzer.h"
+#include "LaptopInterface.h"
 
 /* USER CODE END Includes */
 
@@ -48,12 +48,18 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
+ADC_HandleTypeDef hadc1;
+
+DAC_HandleTypeDef hdac;
+DMA_HandleTypeDef hdma_dac_ch1;
+
 I2C_HandleTypeDef hi2c1;
 
 SPI_HandleTypeDef hspi1;
 
 TIM_HandleTypeDef htim1;
 TIM_HandleTypeDef htim2;
+TIM_HandleTypeDef htim3;
 
 PCD_HandleTypeDef hpcd_USB_FS;
 
@@ -64,21 +70,41 @@ PCD_HandleTypeDef hpcd_USB_FS;
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
+static void MX_DMA_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_SPI1_Init(void);
 static void MX_USB_PCD_Init(void);
 static void MX_TIM2_Init(void);
 static void MX_TIM1_Init(void);
+static void MX_DAC_Init(void);
+static void MX_TIM3_Init(void);
+static void MX_ADC1_Init(void);
 /* USER CODE BEGIN PFP */
-
+void green_routine();
+void red_routine();
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
-
-void green_routine();
-void red_routine();
-
 /* USER CODE BEGIN 0 */
+
+
+
+void enableLEDs()
+{
+	RCC->AHBENR |= RCC_AHBENR_GPIOEEN;
+
+	uint16_t *led_output_registers = ((uint16_t *)&(GPIOE->MODER)) + 1;
+	*led_output_registers = 0x5555;
+}
+
+void toggleLEDs(uint8_t bitmap) {
+	*(((uint8_t*)&(GPIOE->ODR)) + 1) = (*(((uint8_t*)&(GPIOE->ODR)) + 1)) ^ bitmap;
+}
+
+void toggle(void){
+	toggleLEDs(0b11111111);
+}
+
 void enable_clocks()
 {
     RCC->AHBENR |= RCC_AHBENR_GPIOAEN | RCC_AHBENR_GPIOCEN | RCC_AHBENR_GPIOEEN;
@@ -86,32 +112,47 @@ void enable_clocks()
 
 void green_routine()
 {
-	set_green();
 	// get pot value
 	// set display to be green
 	// wait proportional to pot value
 	//HAL_Delay(1000);
 	// set oneshot timer to end sweep
-	setDelay(&DelayTIM4, 100000, &red_routine);
-
+	//uint32_t readValue = Potentiometer_Read();
+	toggle();
+	setLaptopGreen();
+	setDelay(&DelayTIM4, 1000, &red_routine);
+	set_green();
 }
 
 void red_routine()
 {
 	set_red();
+	setLaptopRed();
 	// get pot value
 	// set display to be green
 	// wait proportional to pot value
 	//HAL_Delay(1000);
 	// set oneshot timer to end sweep
-	setDelay(&DelayTIM4, 3000, &green_routine);
+	uint32_t readValue = Potentiometer_Read();
+	setDelay(&DelayTIM4, 1000, &green_routine);
+	toggle();
 }
+
+void finished_routine() {
+	stopTimer();
+	set_finished();
+	return;
+}
+
+
 
 void setup_routine()
 {
 	set_setup();
 	setup_sweeper(&hi2c1, &hspi1, &htim1, &htim2, &hpcd_USB_FS);
 	timerInitialise(&DelayTIM4);
+	HAL_TIM_Base_Start(&htim3);
+	laptopInterfaceInitialise(&finished_routine);
 	enable_interrupt();
 	enable_clocks();
 	initButtonHandler(&green_routine);
@@ -127,7 +168,7 @@ void setup_routine()
   */
 int main(void)
 {
-	/* USER CODE BEGIN 1 */
+  /* USER CODE BEGIN 1 */
 
 	// Pin wiring
 	//  2 x grounds between stm32 and PTU
@@ -137,71 +178,73 @@ int main(void)
 	//  PB6 is I2C1 clock (SCL on the PTU), PB7 is I2C1 data (SDA on the PTU)
 
 
-	/* USER CODE END 1 */
+  /* USER CODE END 1 */
 
-	/* MCU Configuration--------------------------------------------------------*/
+  /* MCU Configuration--------------------------------------------------------*/
 
-	/* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-	HAL_Init();
+  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+  HAL_Init();
 
-	/* USER CODE BEGIN Init */
+  /* USER CODE BEGIN Init */
 
-	/* USER CODE END Init */
+  /* USER CODE END Init */
 
-	/* Configure the system clock */
-	SystemClock_Config();
+  /* Configure the system clock */
+  SystemClock_Config();
 
-	/* USER CODE BEGIN SysInit */
+  /* USER CODE BEGIN SysInit */
 
-	/* USER CODE END SysInit */
+  /* USER CODE END SysInit */
 
-	/* Initialize all configured peripherals */
-	MX_GPIO_Init();
-	MX_I2C1_Init();
-	MX_SPI1_Init();
-	MX_USB_PCD_Init();
-	MX_TIM2_Init();
-	MX_TIM1_Init();
-	/* USER CODE BEGIN 2 */
+  /* Initialize all configured peripherals */
+  MX_GPIO_Init();
+  MX_DMA_Init();
+  MX_I2C1_Init();
+  MX_SPI1_Init();
+  MX_USB_PCD_Init();
+  MX_TIM2_Init();
+  MX_TIM1_Init();
+  MX_DAC_Init();
+  MX_TIM3_Init();
+  MX_ADC1_Init();
+  /* USER CODE BEGIN 2 */
+  HAL_ADC_Start(&hadc1);
 
+  /* USER CODE END 2 */
 
-	/* USER CODE END 2 */
-
-	/* Infinite loop */
-	/* USER CODE BEGIN WHILE */
+  /* Infinite loop */
+  /* USER CODE BEGIN WHILE */
 
 
 
 
 	setup_routine();
-	while (1)
-	{
-		if (get_status() == FINISHED)
-		{
-			stopTimer(&DelayTIM4);
-			// display victory message?
-		}
-		else if (get_status() == SETUP)
-		{
-			// display pre-game message?
-		}
-		else if (get_status() == RED)
-		{
-			// set display to be red
-			sweep_routine();
-		}
-		else if (get_status() == DETECTED)
-		{
-			HAL_Delay(1);
-			// while status is detected activate the buzzer
+	//toggleBuzzer(hdac);
+	while (1) {
+
+
+		switch(get_status()) {
+			case FINISHED:
+				stopTimer(&DelayTIM4);
+				break;
+			case SETUP:
+				break;
+			case RED:
+				sweep_routine();
+				break;
+			case DETECTED:
+				HAL_Delay(1);
+				break;
+			case GREEN:
+				break;
 		}
 
 
-	/* USER CODE END WHILE */
+    /* USER CODE END WHILE */
 
-	/* USER CODE BEGIN 3 */
+    /* USER CODE BEGIN 3 */
 	}
-	/* USER CODE END 3 */
+  /* USER CODE END 3 */
 }
 
 /**
@@ -244,7 +287,8 @@ void SystemClock_Config(void)
     Error_Handler();
   }
   PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USB|RCC_PERIPHCLK_I2C1
-                              |RCC_PERIPHCLK_TIM1;
+                              |RCC_PERIPHCLK_TIM1|RCC_PERIPHCLK_ADC12;
+  PeriphClkInit.Adc12ClockSelection = RCC_ADC12PLLCLK_DIV1;
   PeriphClkInit.I2c1ClockSelection = RCC_I2C1CLKSOURCE_HSI;
   PeriphClkInit.USBClockSelection = RCC_USBCLKSOURCE_PLL;
   PeriphClkInit.Tim1ClockSelection = RCC_TIM1CLK_HCLK;
@@ -252,6 +296,113 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+}
+
+/**
+  * @brief ADC1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_ADC1_Init(void)
+{
+
+  /* USER CODE BEGIN ADC1_Init 0 */
+
+  /* USER CODE END ADC1_Init 0 */
+
+  ADC_MultiModeTypeDef multimode = {0};
+  ADC_ChannelConfTypeDef sConfig = {0};
+
+  /* USER CODE BEGIN ADC1_Init 1 */
+
+  /* USER CODE END ADC1_Init 1 */
+
+  /** Common config
+  */
+  hadc1.Instance = ADC1;
+  hadc1.Init.ClockPrescaler = ADC_CLOCK_ASYNC_DIV1;
+  hadc1.Init.Resolution = ADC_RESOLUTION_12B;
+  hadc1.Init.ScanConvMode = ADC_SCAN_DISABLE;
+  hadc1.Init.ContinuousConvMode = ENABLE;
+  hadc1.Init.DiscontinuousConvMode = DISABLE;
+  hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
+  hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
+  hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+  hadc1.Init.NbrOfConversion = 1;
+  hadc1.Init.DMAContinuousRequests = DISABLE;
+  hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
+  hadc1.Init.LowPowerAutoWait = DISABLE;
+  hadc1.Init.Overrun = ADC_OVR_DATA_OVERWRITTEN;
+  if (HAL_ADC_Init(&hadc1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configure the ADC multi-mode
+  */
+  multimode.Mode = ADC_MODE_INDEPENDENT;
+  if (HAL_ADCEx_MultiModeConfigChannel(&hadc1, &multimode) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configure Regular Channel
+  */
+  sConfig.Channel = ADC_CHANNEL_9;
+  sConfig.Rank = ADC_REGULAR_RANK_1;
+  sConfig.SingleDiff = ADC_DIFFERENTIAL_ENDED;
+  sConfig.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
+  sConfig.OffsetNumber = ADC_OFFSET_NONE;
+  sConfig.Offset = 0;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN ADC1_Init 2 */
+
+  /* USER CODE END ADC1_Init 2 */
+
+}
+
+/**
+  * @brief DAC Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_DAC_Init(void)
+{
+
+  /* USER CODE BEGIN DAC_Init 0 */
+
+  /* USER CODE END DAC_Init 0 */
+
+  DAC_ChannelConfTypeDef sConfig = {0};
+
+  /* USER CODE BEGIN DAC_Init 1 */
+
+  /* USER CODE END DAC_Init 1 */
+
+  /** DAC Initialization
+  */
+  hdac.Instance = DAC;
+  if (HAL_DAC_Init(&hdac) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** DAC channel OUT1 config
+  */
+  sConfig.DAC_Trigger = DAC_TRIGGER_T3_TRGO;
+  sConfig.DAC_OutputBuffer = DAC_OUTPUTBUFFER_ENABLE;
+  if (HAL_DAC_ConfigChannel(&hdac, &sConfig, DAC_CHANNEL_1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  __HAL_REMAPTRIGGER_ENABLE(HAL_REMAPTRIGGER_DAC1_TRIG);
+  /* USER CODE BEGIN DAC_Init 2 */
+
+  /* USER CODE END DAC_Init 2 */
+
 }
 
 /**
@@ -456,6 +607,51 @@ static void MX_TIM2_Init(void)
 }
 
 /**
+  * @brief TIM3 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM3_Init(void)
+{
+
+  /* USER CODE BEGIN TIM3_Init 0 */
+
+  /* USER CODE END TIM3_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM3_Init 1 */
+
+  /* USER CODE END TIM3_Init 1 */
+  htim3.Instance = TIM3;
+  htim3.Init.Prescaler = 48-1;
+  htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim3.Init.Period = 10-1;
+  htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim3) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim3, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_UPDATE;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim3, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM3_Init 2 */
+
+  /* USER CODE END TIM3_Init 2 */
+
+}
+
+/**
   * @brief USB Initialization Function
   * @param None
   * @retval None
@@ -487,6 +683,22 @@ static void MX_USB_PCD_Init(void)
 }
 
 /**
+  * Enable DMA controller clock
+  */
+static void MX_DMA_Init(void)
+{
+
+  /* DMA controller clock enable */
+  __HAL_RCC_DMA1_CLK_ENABLE();
+
+  /* DMA interrupt init */
+  /* DMA1_Channel3_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Channel3_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Channel3_IRQn);
+
+}
+
+/**
   * @brief GPIO Initialization Function
   * @param None
   * @retval None
@@ -494,6 +706,8 @@ static void MX_USB_PCD_Init(void)
 static void MX_GPIO_Init(void)
 {
   GPIO_InitTypeDef GPIO_InitStruct = {0};
+/* USER CODE BEGIN MX_GPIO_Init_1 */
+/* USER CODE END MX_GPIO_Init_1 */
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOE_CLK_ENABLE();
@@ -532,6 +746,8 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
 
+/* USER CODE BEGIN MX_GPIO_Init_2 */
+/* USER CODE END MX_GPIO_Init_2 */
 }
 
 /* USER CODE BEGIN 4 */

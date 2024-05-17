@@ -1,6 +1,5 @@
 Core/Src/lidar_sweep.o: ../Core/Src/lidar_sweep.c \
- ../Core/Inc/lidar_sweep.h \
- ../Drivers/CMSIS/Device/ST/STM32F3xx/Include/stm32f3xx.h \
+ ../Core/Inc/lidar_sweep.h ../Core/Inc/Serial.h \
  ../Drivers/CMSIS/Device/ST/STM32F3xx/Include/stm32f303xc.h \
  ../Drivers/CMSIS/Include/core_cm4.h \
  ../Drivers/CMSIS/Include/cmsis_version.h \
@@ -8,6 +7,8 @@ Core/Src/lidar_sweep.o: ../Core/Src/lidar_sweep.c \
  ../Drivers/CMSIS/Include/cmsis_gcc.h \
  ../Drivers/CMSIS/Include/mpu_armv7.h \
  ../Drivers/CMSIS/Device/ST/STM32F3xx/Include/system_stm32f3xx.h \
+ ../Drivers/CMSIS/Device/ST/STM32F3xx/Include/stm32f3xx.h \
+ ../Drivers/CMSIS/Device/ST/STM32F3xx/Include/stm32f303xc.h \
  ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal.h \
  ../Core/Inc/stm32f3xx_hal_conf.h \
  ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_rcc.h \
@@ -20,6 +21,10 @@ Core/Src/lidar_sweep.o: ../Core/Src/lidar_sweep.c \
  ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_dma.h \
  ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_dma_ex.h \
  ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_cortex.h \
+ ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_adc.h \
+ ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_adc_ex.h \
+ ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_dac.h \
+ ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_dac_ex.h \
  ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_flash.h \
  ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_flash_ex.h \
  ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_i2c.h \
@@ -33,9 +38,9 @@ Core/Src/lidar_sweep.o: ../Core/Src/lidar_sweep.c \
  ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_spi_ex.h \
  ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_tim.h \
  ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_tim_ex.h \
- ../Core/Inc/serial.h ../Core/Inc/sweep_flag.h
+ ../Core/Inc/sweep_flag.h
 ../Core/Inc/lidar_sweep.h:
-../Drivers/CMSIS/Device/ST/STM32F3xx/Include/stm32f3xx.h:
+../Core/Inc/Serial.h:
 ../Drivers/CMSIS/Device/ST/STM32F3xx/Include/stm32f303xc.h:
 ../Drivers/CMSIS/Include/core_cm4.h:
 ../Drivers/CMSIS/Include/cmsis_version.h:
@@ -43,6 +48,8 @@ Core/Src/lidar_sweep.o: ../Core/Src/lidar_sweep.c \
 ../Drivers/CMSIS/Include/cmsis_gcc.h:
 ../Drivers/CMSIS/Include/mpu_armv7.h:
 ../Drivers/CMSIS/Device/ST/STM32F3xx/Include/system_stm32f3xx.h:
+../Drivers/CMSIS/Device/ST/STM32F3xx/Include/stm32f3xx.h:
+../Drivers/CMSIS/Device/ST/STM32F3xx/Include/stm32f303xc.h:
 ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal.h:
 ../Core/Inc/stm32f3xx_hal_conf.h:
 ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_rcc.h:
@@ -55,6 +62,10 @@ Core/Src/lidar_sweep.o: ../Core/Src/lidar_sweep.c \
 ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_dma.h:
 ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_dma_ex.h:
 ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_cortex.h:
+../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_adc.h:
+../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_adc_ex.h:
+../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_dac.h:
+../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_dac_ex.h:
 ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_flash.h:
 ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_flash_ex.h:
 ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_i2c.h:
@@ -68,5 +79,4 @@ Core/Src/lidar_sweep.o: ../Core/Src/lidar_sweep.c \
 ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_spi_ex.h:
 ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_tim.h:
 ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_tim_ex.h:
-../Core/Inc/serial.h:
 ../Core/Inc/sweep_flag.h:

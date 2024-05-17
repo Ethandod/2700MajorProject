@@ -67,7 +67,7 @@ void setup_sweeper(I2C_HandleTypeDef *hi2c1, SPI_HandleTypeDef *hspi1, TIM_Handl
 	// enable clocks
 	RCC->AHBENR |= RCC_AHBENR_GPIOAEN | RCC_AHBENR_GPIOCEN | RCC_AHBENR_GPIOEEN;
 
-	SerialInitialise(BAUD_115200, &USART1_PORT, 0x00);
+	//SerialInitialise(BAUD_115200, &USART1_PORT, 0x00);
 
 	HAL_TIM_PWM_Start(htim2, TIM_CHANNEL_1);
 	HAL_TIM_PWM_Start(htim2, TIM_CHANNEL_2);
@@ -116,7 +116,7 @@ void sweep(uint16_t *previousReadings, uint16_t *output)
 	uint8_t thresholdBreachCount = 0;
 
 	// set the servos to the starting position
-	SerialOutputString("############\r\n", &USART1_PORT);
+	//SerialOutputString("############\r\n", &USART1_PORT);
 	set_tilt(STARTING_OFFSET_VERT);
 	set_pan(starting_pwm);
 	HAL_Delay(DEGREE_TRAVERSE_MS * DEGREES_OF_SWEEP * RESET_DELAY_FACTOR);
@@ -139,7 +139,7 @@ void sweep(uint16_t *previousReadings, uint16_t *output)
 			delta = abs(output[i]-previousReadings[i]);
 
 			sprintf(string_to_send, "[%hu] : {%hu vs %hu} --> [%hu]\r\n",i, output[i], previousReadings[i], delta);
-			SerialOutputString(string_to_send, &USART1_PORT);
+			//SerialOutputString(string_to_send, &USART1_PORT);
 
 			if (delta > THRESHOLD_VALUE)
 			{
@@ -153,11 +153,12 @@ void sweep(uint16_t *previousReadings, uint16_t *output)
 		else
 		{
 			sprintf(string_to_send, "{%hu}\r\n", output[i]);
-			SerialOutputString(string_to_send, &USART1_PORT);
+			//SerialOutputString(string_to_send, &USART1_PORT);
 		}
 		if (thresholdBreachCount >= BREACHES)
 		{
-			SerialOutputString("Breach Limit Reached!!!\r\n", &USART1_PORT);
+			//SerialOutputString("Breach Limit Reached!!!\r\n", &USART1_PORT);
+
 			set_detected();
 			return;
 		}

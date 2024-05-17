@@ -1,6 +1,6 @@
-../Core/Src/sweep_flag.c:5:10:get_status	4	static
-../Core/Src/sweep_flag.c:10:6:set_setup	4	static
-../Core/Src/sweep_flag.c:16:6:set_green	4	static
-../Core/Src/sweep_flag.c:22:6:set_red	4	static
-../Core/Src/sweep_flag.c:28:6:set_detected	4	static
-../Core/Src/sweep_flag.c:34:6:set_finished	4	static
+../Core/Src/sweep_flag.c:5:22:get_status	4	static
+../Core/Src/sweep_flag.c:12:6:set_setup	4	static
+../Core/Src/sweep_flag.c:18:6:set_green	4	static
+../Core/Src/sweep_flag.c:24:6:set_red	4	static
+../Core/Src/sweep_flag.c:30:6:set_detected	4	static
+../Core/Src/sweep_flag.c:36:6:set_finished	4	static

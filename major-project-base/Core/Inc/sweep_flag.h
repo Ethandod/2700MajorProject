@@ -3,8 +3,7 @@
 
 #include <stdint.h>
 
-enum
-{
+enum ProgrammeStatus {
 	SETUP,
 	GREEN,
 	RED,
@@ -12,7 +11,7 @@ enum
 	FINISHED
 };
 
-uint32_t get_status();
+enum ProgrammeStatus get_status();
 
 void set_setup();
 

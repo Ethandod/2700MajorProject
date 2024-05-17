@@ -19,6 +19,10 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_dma.h \
  ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_dma_ex.h \
  ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_cortex.h \
+ ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_adc.h \
+ ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_adc_ex.h \
+ ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_dac.h \
+ ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_dac_ex.h \
  ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_flash.h \
  ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_flash_ex.h \
  ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_i2c.h \
@@ -32,10 +36,11 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_spi_ex.h \
  ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_tim.h \
  ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_tim_ex.h \
- ../Core/Inc/ptu_definitions.h ../Core/Inc/ptu_i2c.h ../Core/Inc/serial.h \
- ../Core/Inc/lidar_sweep.h ../Core/Inc/serial.h ../Core/Inc/sweep_flag.h \
- ../Core/Inc/sweep_flag.h ../Core/Inc/timer.h \
- ../Drivers/CMSIS/Device/ST/STM32F3xx/Include/stm32f303xc.h
+ ../Core/Inc/ptu_definitions.h ../Core/Inc/ptu_i2c.h \
+ ../Core/Inc/lidar_sweep.h ../Core/Inc/Serial.h \
+ ../Drivers/CMSIS/Device/ST/STM32F3xx/Include/stm32f303xc.h \
+ ../Core/Inc/sweep_flag.h ../Core/Inc/sweep_flag.h ../Core/Inc/timer.h \
+ ../Core/Inc/buzzer.h ../Core/Inc/ptu_i2c.h ../Core/Inc/LaptopInterface.h
 ../Core/Inc/main.h:
 ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal.h:
 ../Core/Inc/stm32f3xx_hal_conf.h:
@@ -57,6 +62,10 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_dma.h:
 ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_dma_ex.h:
 ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_cortex.h:
+../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_adc.h:
+../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_adc_ex.h:
+../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_dac.h:
+../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_dac_ex.h:
 ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_flash.h:
 ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_flash_ex.h:
 ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_i2c.h:
@@ -72,10 +81,12 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_tim_ex.h:
 ../Core/Inc/ptu_definitions.h:
 ../Core/Inc/ptu_i2c.h:
-../Core/Inc/serial.h:
 ../Core/Inc/lidar_sweep.h:
-../Core/Inc/serial.h:
+../Core/Inc/Serial.h:
+../Drivers/CMSIS/Device/ST/STM32F3xx/Include/stm32f303xc.h:
 ../Core/Inc/sweep_flag.h:
 ../Core/Inc/sweep_flag.h:
 ../Core/Inc/timer.h:
-../Drivers/CMSIS/Device/ST/STM32F3xx/Include/stm32f303xc.h:
+../Core/Inc/buzzer.h:
+../Core/Inc/ptu_i2c.h:
+../Core/Inc/LaptopInterface.h:

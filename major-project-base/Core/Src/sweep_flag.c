@@ -1,10 +1,12 @@
 #include "sweep_flag.h"
 
-uint32_t status = SETUP;
+enum ProgrammeStatus status = SETUP;
 
-uint32_t get_status()
+enum ProgrammeStatus get_status()
 {
+
 	return status;
+
 }
 
 void set_setup()
