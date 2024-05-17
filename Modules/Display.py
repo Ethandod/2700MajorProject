@@ -35,7 +35,7 @@ class Window:
                     port.sendMessage("stop\0")
                     self.setBlue()
                     
-            print(self.port)
+            # print(self.port)
             pygame.display.flip()
 
 
