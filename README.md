@@ -15,7 +15,7 @@ Welcome to the MTRX 2700 repository!
 1. Jeremy Fox: Lidar and Pan tilt Modules
 2. Krish Singh: Potentiometer Module
 3. Ethan Dodson: Button Activation Module, Minutes and README
-4. Jono Tuite: Piezo Buzzer Module and README
+4. Jono Tuite: Piezo Buzzer Module
 5. Sean Sun: Timer, Serial and Button Deactivation Modules
 
 
@@ -38,13 +38,12 @@ This module handles the serial so that when a flag get's triggered it will be ei
   - `setLaptopRed`: The computer screen will turn red when this is flagged.
   - `checkStop`: Checks if the space bar has been pressed, if so it goes through the `laptopInterfaceInitialise` function and stops the whole game.
 
+
 #### `Serial.c`
 Primarily involved with interfacing between the system’s hardware capabilities and the application-level code, especially related to system call operations. 
 - **Key Functions:**
   - `serialInitialise`: Initialising the serial so that it can transmit a string.
   - `serialTransmitString`: Sending the string either 'red' or 'green to the serial
-
-
 
 
 ### Piezo Buzzer Module:
@@ -83,21 +82,21 @@ This module handles the pan tilt unit and the lidar so that it is able to sweep 
 
 
 #### `main.c`
-Acts as the central hub of the application, orchestrating the initialization and handling of Passes incoming data to execute the different modules that are setup for different points in our system like when the timer sets the status to RED this calls the `sweep_routine` also when the system activates and then when someone presses the spacebar to deactivate the game. 
+This serves as the main hub of the application that manages setting up and handling of sending whatever comes in so that it can run through various modules based on different points within our system, for instance,`sweep_routine` is called immediately the timer hits RED also during system activation and also when the game has been switched off using a space bar through the Serial/Deactivation Module.
 
 #### `Laptopinterface.c`
-The key functions drive the interface behavior. laptopInterfaceInitialise sets up a callback for a game-stopping function. setLaptopGreen flags the screen to turn green, while setLaptopRed flags it to turn red. The checkStop function monitors space bar input; if detected, it triggers laptopInterfaceInitialise, halting the game's progression.
+The interface functionality is determined by its primary methods. The game stopping function is prepared or initialised by `laptopInterfaceInitialise`. To cause the screen to appear green, use setLaptopGreen, on the other side, setLaptopRed will cause the screen to be red. monitor stop key the key functions drive the interface behavior. When space bar signal is found, call `laptopInterfaceInitialise` stops any continued progress in the game.
 
 #### `buttonhandler.c`
-The primary function is initButtonHandler, which sets up the button functionality. When this function is invoked, it configures the button to trigger specific actions upon activation. This initialization likely involves assigning callback functions to the button, so when pressed, it executes the corresponding actions or functions designated for that particular event. This initialization process is crucial for ensuring the button's responsiveness and defining its behavior within the system or application it interacts with.
+What `initButtonHandler` does first is define how the button works. When called, set button such that it activates specific events. During initialization, what might be done is attaching some callback functions to this button such that if it s pressed then execute appropriate actions which are intended for the given occasion only. However, this is vital for making sure that responsiveness from this passed on as well as providing guidelines on how it should operate when employed by either an API or any other part of the system or application.
 
 #### `buzzer.c`
-The primary task revolves around initializing a timer and establishing callbacks to execute specific actions at predetermined intervals or for one-shot events, depending on the configured timer settings. A significant function within this module is `toggleBuzzer`, which handles the activation and deactivation of the buzzer. This function likely manages the state of the buzzer, enabling it to produce sound when toggled on and silencing it when toggled off. The toggling mechanism controlled by `toggleBuzzer` plays a pivotal role in integrating auditory feedback into the system's functionality, enhancing user interaction and providing alerts or notifications when necessary.
+At the core, the program involves setting up the timer and assigning triggers that will perform given tasks regularly or once when the timer goes off. An important function that is used in this file is `toggleBuzzer` that takes care of the buzzer’s activation and deactivation. Its behavior in this function is toggling on the buzzer so that audio is emitted and vice versa for turning it off.
 
 #### `lidar_sweep.c`
-In `lidar_sweep.c`, the focus lies on managing the Lidar sweeper functionality. The `setup_sweeper` function is responsible for configuring hardware timers specifically tailored for controlling the servo motor associated with the Lidar unit. These timers likely dictate the precise timing and positioning of the servo motor to facilitate accurate and controlled scanning motions.
+`lidar_sweep.c` mainly focuses on managing the functionality of the Lidar sweeper. The hardware timers used to control the servo motor that operates the Lidar assembly are set up by the `setup_sweeper`function. These timers may specify the exact timing as well as position of the servo motor so as to allow accurate and controlled scanning motions.
 
-On the other hand, `sweep_routine` plays a crucial role in initializing the sweeper system, ensuring it responds appropriately to various program statuses being flagged. This function likely sets up the necessary conditions and actions to be taken when specific flags or indicators are raised within the program. By defining how the sweeper should behave under different circumstances, `sweep_routine` contributes to the overall functionality and reliability of the Lidar scanning process.
+On the other hand, `sweep_routine` is very beneficial when it comes to initializing the sweeper system hence it should be able to react properly when different statuses of program have been flagged out. This can include setting up necessary conditions and taking action upon encountering specific flags or indicators during program execution. `sweep_routine` helps in defining how the sweeper should react under various conditions for the whole process of scanning using Lidar to function effectively and dependably.
 
 #### `pot.c`
 Within `pot.c`, the functionalities revolve around managing the potentiometer, a variable resistor commonly used for input control or measurement purposes. 
@@ -107,30 +106,36 @@ The `Potentiometer_Init` function serves the purpose of initializing the potenti
 Meanwhile, `Potentiometer_Read` is responsible for actually reading the current value from the potentiometer. This function likely interacts with the ADC module to capture the analog voltage level produced by the potentiometer's wiper position and converts it into a digital value representing the potentiometer's position or setting. This reading can then be utilized within the system for various purposes, such as controlling parameters, adjusting settings, or providing feedback based on user input.
 
 #### `serial.c`
-In `Serial.c`, the main focus lies in facilitating communication between the system's hardware and the application-level code, particularly concerning system call operations. 
+To interact with the potentiometer, traditionally used for input control or measurement, `pot.c`’s functionalities have to be managed.
 
-At the core of this module are key functions like `serialInitialise`, which is responsible for initializing the serial communication interface. This initialization likely involves configuring parameters such as baud rate, parity, and stop bits to establish a reliable communication channel between the system and external devices.
+To achieve this initiation purpose, `Potentiometer_Init`’s responsibility is usually expressed in terms of the timing when it sets up Analog-to-Digital Converter (ADC) module unlike other related functions. This is done to make sure that hardware will be ready for reading an anlaog signal from potentiometer and eventually change it into a numeric form which is more convenient for the microcontroller or any other system processing logic.
 
-Another vital function is `serialTransmitString`, which handles the transmission of strings over the serial interface. This function specifically deals with sending either 'red' or 'green' strings over the serial connection. By providing this capability, the module enables the system to communicate predefined messages or status updates to external devices or other components within the system architecture, enhancing overall system interoperability and functionality.
+On the other hand,`Potentiometer_Read` deals in actual measurement procedure of what current value a potentiometer holds as of the moment when called upon. During such an activity there might much interaction between this function and ADC module in order to capture an analog voltage level corresponding to the potentiometer wiper position before turning it into a digital value which represents the position or setting of a potentiometer itself. 
 
 #### `sweep_flag.c`
-In `sweep_flag.c`, the functionality revolves around managing the program status, which indicates the current state or condition of the program's operation. A significant function within this module is `ProgrammeStatus`, responsible for retrieving and providing information regarding the program's status. This function likely accesses and reads internal variables or flags that denote whether the program state is categorized as GREEN, RED, DETECTED, or FINISHED. By offering insights into the program's status, `ProgrammeStatus` enables other components or modules within the system to adapt their behavior or processes accordingly, ensuring synchronized operation and effective management of the overall system functionality.
+`sweep_flag.c` is mainly concerned with controlling the status of the program, which describes the current state that the program is in. `ProgrammeStatus` is an important routine in this module responsible for accessing the program’s current status. The function probably reads internal variables or flags that show whether the program is in GREEN, RED, DETECTED or FINISHED state. Essentially, `ProgrammeStatus` provides information about the condition of the whole system so as other parts in it can adjust accordingly, synchronize their activities and properly manage its performance.
 
 #### `timer.c`
-In `timer.c`, the primary focus is on managing timing operations essential for executing tasks at precise intervals, crucial for time-sensitive operations such as LED blinking or coordinating system events. 
+The main goal of the `timer.c` file is to manage timing operations that are used while conducting some tasks at regular intervals requiring precised timings thus imperative to time-sensitive tasks such as LED blinking or coordinating system events. This module comprises of vital functions such as `timerInitialise` which is utilized during the initialization of timer functionality. Here, the function is likely configuring timer hardware by setting parameters like the time interval that should trigger it and also specifying which function is to be called every time it reaches that point.
 
-At the core of this module are key functions like `timerInitialise`, responsible for initializing the timer functionality. This function likely configures the timer hardware, specifying parameters such as the interval at which the timer should trigger and the callback function to execute when that interval is reached. 
 
-Another critical function is `TIM4_IRQHandler`, which serves as the central component of the timing operation. This function is likely an Interrupt Service Routine (ISR) associated with the timer's hardware interrupt. When the timer reaches its specified interval, this ISR is triggered, allowing the set callback function to be executed promptly. By efficiently managing the timing aspects of the system, `TIM4_IRQHandler` ensures that tasks requiring precise timing are executed reliably and in synchronization with the system's overall operation.
+An additional important one is `TIM4_IRQHandler` which plays the lead role in timing operation this is an Interrupt Service Routine (ISR) which is associated with the hardware interrupt of the timer. It is this ISR that triggers when the timer reaches its set interval and ensures that the callback function is called swiftly.With proper management of timing issues within the context of the entire system, the purpose of `TIM4_IRQHandler` is to enable execution of tasks requiring a high degree of temporal precision (Fermi et al., 1976), which should be synchronized with the general operation of the system
 
 
 ### User Instructions
 
 - Ensure that the STM32 definition files are included in the project. These files contain crucial definitions and are essential for the application to function correctly.
 
-- Set your serial communication to use a baud rate of 115200 for optimal performance.
-
-- 
+- Set your serial communication to use a baud rate of 115200 for optimal performance to display if it is green or red.
+- Setup up the python code for your laptop.
+- Setup the STM32 with the potentiometer, lidar, pan tilt unit and buzzer.
+- Run the STM32 program
+- Adjust the potentiometer to the timing of the game for your liking.
+- Press the user button on the STM32 to start the game.
+- Can have as many players as you would like.
+- When the computer screen is GREEN you can make your way to the laptop.
+- When the computer screen is RED the lidar will scan the room and if there is any movement the buzzer will go off and the laser pointer ontop of the lidar will be pointing at the person who has moved. They will be eliminated from the game.
+- Repeat the rpocess of the GREEN or RED screen until someone touches the space bar in which the screen will turn BLUE and that person is deemed the winenr of the game.
 
 ### Credits
 
