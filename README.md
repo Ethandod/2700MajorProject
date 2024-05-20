@@ -68,14 +68,21 @@ This handles the buttons that are used for activation of the game, resetting the
   - `initButtonHandler`: Initialising the button so that when a function is called to it, it activates that function.
 
 
+### Game Flow Module
+This cordinates how each module should be behaving, employing get/set functionality for a variable that inicates the game's current state.
+#### 'sweep_flag'
+  - `get_status`: Returns current state of game.
+  - `set_setup`: Sets the current state to the setup phase.
+  - `set_green`: Sets the current state to 'green light'.
+  - `set_red`: Sets the current state to 'red light'.
+  - `set_detected`: Set the current state to 'detected'.
+  - `ser_finished`: Set the current state to 'finished'.
+
 ### Lidar/Sweeper Module:
-This module handles the pan tilt unit and the lidar so that it is able to sweep the room, then using the lidar it can detect movement.
-#### `sweep_flag.c`
-- **Key Functions:**
-  - `ProgrammeStatus`: Retreives the status of the program whether it is GREEN, RED, DETECTED or FINISHED
-#### `lidar_sweep.c`
-  - `setup_sweeper`: Inputs hardware timers for the servo  
-  - `sweep_routine`: This initialises the sweeper so that it knows what to do when any of the program status's are flagged
+This module handles the pan tilt unit and the lidar so that it is able to sweep the room, and is used to detect movement.
+#### `lidar_sweep`
+  - `setup_sweeper`: Takes the hardware timers for the servos in the pan tilt unit and Lidar
+  - `sweep_routine`: Sweeps the Pan Servo through a given range, taking distance readings with the Lidar. 
 
 
 ### Integration
@@ -94,9 +101,11 @@ What `initButtonHandler` does first is define how the button works. When called,
 At the core, the program involves setting up the timer and assigning triggers that will perform given tasks regularly or once when the timer goes off. An important function that is used in this file is `toggleBuzzer` that takes care of the buzzer’s activation and deactivation. Its behavior in this function is toggling on the buzzer so that audio is emitted and vice versa for turning it off.
 
 #### `lidar_sweep.c`
-`lidar_sweep.c` mainly focuses on managing the functionality of the Lidar sweeper. The hardware timers used to control the servo motor that operates the Lidar assembly are set up by the `setup_sweeper`function. These timers may specify the exact timing as well as position of the servo motor so as to allow accurate and controlled scanning motions.
 
-On the other hand, `sweep_routine` is very beneficial when it comes to initializing the sweeper system hence it should be able to react properly when different statuses of program have been flagged out. This can include setting up necessary conditions and taking action upon encountering specific flags or indicators during program execution. `sweep_routine` helps in defining how the sweeper should react under various conditions for the whole process of scanning using Lidar to function effectively and dependably.
+`lidar_sweep.c` mainly focuses on managing the functionality of the Lidar sweeper. The hardware timers used to control the servo motor that operates the Lidar assembly are set up by the `setup_sweeper` function. 
+If the user wishes to fine tune how the unit sweeps, they can change the constants defined in `sweep.h`.
+`sweep_routine` repeatedly sweeps the area infront of the unit until the game state switches back to green or, movement is detected. 
+
 
 #### `pot.c`
 Within `pot.c`, the functionalities revolve around managing the potentiometer, a variable resistor commonly used for input control or measurement purposes. 
@@ -128,7 +137,7 @@ An additional important one is `TIM4_IRQHandler` which plays the lead role in ti
 
 - Set your serial communication to use a baud rate of 115200 for optimal performance to display if it is green or red.
 - Setup up the python code for your laptop.
-- Setup the STM32 with the potentiometer, lidar, pan tilt unit and buzzer.
+- Setup the STM32 with the potentiometer, lidar, pan tilt unit and buzzer (wiring for PTU commented in main.c).
 - Run the STM32 program
 - Adjust the potentiometer to the timing of the game for your liking.
 - Press the user button on the STM32 to start the game.
