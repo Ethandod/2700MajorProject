@@ -19,6 +19,8 @@ struct _DelayTIM {
 	bool enabled;					// Flag indicating if TIM is used in this code section
 };
 
+
+// TIM2 is used elseware
 //void TIM2_IRQHandler() {if (DelayTIM2.enabled) {timerHandler(&DelayTIM2);}}
 DelayTIM DelayTIM2 = {
 		.TIM = TIM2,
@@ -55,7 +57,10 @@ DelayTIM DelayTIM4 = {
 	};
 
 void timerHandler(DelayTIM *delay_timer) {
+	// Clear the interrupt flag
     delay_timer->TIM->SR &= ~TIM_SR_UIF;
+
+	// Call the callback function and reset the timers as necessary
 	if (delay_timer->callback_ptr == NULL) {
 		stopTimer(delay_timer);
 		return;
@@ -117,6 +122,7 @@ uint32_t get_delay(DelayTIM *delay_timer)
 }
 
 void resetTimer(DelayTIM *delay_timer, uint32_t delay_ms) {
+	// Reset the timer to the new delay
 	stopTimer(delay_timer);
     delay_timer->TIM->ARR = delay_ms;
 	delay_timer->TIM->CR1 |= TIM_CR1_CEN;
@@ -124,17 +130,20 @@ void resetTimer(DelayTIM *delay_timer, uint32_t delay_ms) {
 }
 
 void stopTimer(DelayTIM *delay_timer) {
+	// Stop the timer
 	delay_timer->TIM->CR1 &= ~TIM_CR1_CEN;
 	delay_timer->TIM->CNT = 0x00;
 }
 
 void setDelayLoop(DelayTIM *delay_timer, uint32_t delay_ms, void (*callback)(void)) {
+	// Set the timer to loop and reset the timer
 	delay_timer->callback_ptr = callback;
 	delay_timer->is_loop = true;
 	resetTimer(delay_timer, delay_ms);
 }
 
 void setDelay(DelayTIM *delay_timer, uint32_t delay_ms, void (*callback)(void)) {
+	// Set the timer to run once and reset the timer
 	delay_timer->callback_ptr = callback;
 	delay_timer->is_loop = false;
 	resetTimer(delay_timer, delay_ms);
