@@ -25,27 +25,24 @@ Welcome to the MTRX 2700 repository!
 **`timer.c`**
 Handles timing operations, allowing callbacks to be executed at regular intervals set during initialization. This is crucial for tasks that need precise timing like blinking LEDs or handling time-sensitive operations.
 - **Key Functions:**
-  - `timerInitialise`: Starts the timer with a specified interval and callback.
-  - `TIM4_IRQHandler`: The heart of the timing operation, it calls the set callback whenever the timer hits the specified interval.
+  - `timerInitialise`: Initialises the timer module setting up the relevent bits for the timer to operate.
+  - 'Delay': Creates a delay and calls a function when complete.
 
 
 ### Serial/Deactivation Module:
 This module handles the serial so that when a flag get's triggered it will be either green on the computer screen or red on the computer screen using a python module. The serial moniter will also update the user by outputting either red or green. The is also integration of the deactivation module into the Serial module as we have used the space bar on the laptop as the deactivator
 #### `LaptopInterface.c`
 - **Key Functions:**
-  - `laptopInterfaceInitialise`: Initialises the callback for a function that will be a stopping game function.
+  - `laptopInterfaceInitialise`: Initialises the stop callback function and the serial module as required.
   - `setLaptopGreen`: The computer screen will turn Green when this is flagged.
   - `setLaptopRed`: The computer screen will turn red when this is flagged.
-  - `checkStop`: Checks if the space bar has been pressed, if so it goes through the `laptopInterfaceInitialise` function and stops the whole game.
+  - `checkStop`: If a spacebar is pressed, this callback function is called so it stops the whole game.
 
 #### `Serial.c`
-Primarily involved with interfacing between the system’s hardware capabilities and the application-level code, especially related to system call operations. 
+Primarily involved with interfacing between the board and external devices. 
 - **Key Functions:**
   - `serialInitialise`: Initialising the serial so that it can transmit a string.
-  - `serialTransmitString`: Sending the string either 'red' or 'green to the serial
-
-
-
+  - `serialTransmitString`: Transmits the inputted string via the selected serial port.
 
 ### Piezo Buzzer Module:
 Handles the Piezo buzzer by setting in on using a button handler.
@@ -70,7 +67,7 @@ This handles the buttons that are used for activation of the game, resetting the
 
 
 ### Game Flow Module
-This cordinates how each module should be behaving, employing get/set functionality for a variable that inicates the game's current state.
+This cordinates how each module should be behaving, employing get/set functionality for a variable that indicates the game's current state.
 #### 'sweep_flag'
   - `get_status`: Returns current state of game.
   - `set_setup`: Sets the current state to the setup phase.
@@ -85,9 +82,7 @@ This module handles the pan tilt unit and the lidar so that it is able to sweep 
   - `setup_sweeper`: Takes the hardware timers for the servos in the pan tilt unit and Lidar
   - `sweep_routine`: Sweeps the Pan Servo through a given range, taking distance readings with the Lidar. 
 
-
 ### Integration
-
 
 #### `main.c`
 This serves as the main hub of the application that manages setting up and handling of sending whatever comes in so that it can run through various modules based on different points within our system, for instance,`sweep_routine` is called immediately the timer hits RED also during system activation and also when the game has been switched off using a space bar through the Serial/Deactivation Module.
@@ -102,11 +97,9 @@ What `initButtonHandler` does first is define how the button works. When called,
 At the core, the program involves setting up the timer and assigning triggers that will perform given tasks regularly or once when the timer goes off. An important function that is used in this file is `toggleBuzzer` that takes care of the buzzer’s activation and deactivation. Its behavior in this function is toggling on the buzzer so that audio is emitted and vice versa for turning it off.
 
 #### `lidar_sweep.c`
-
 `lidar_sweep.c` mainly focuses on managing the functionality of the Lidar sweeper. The hardware timers used to control the servo motor that operates the Lidar assembly are set up by the `setup_sweeper` function. 
 If the user wishes to fine tune how the unit sweeps, they can change the constants defined in `sweep.h`.
 `sweep_routine` repeatedly sweeps the area infront of the unit until the game state switches back to green or, movement is detected. 
-
 
 #### `pot.c`
 Within `pot.c`, the functionalities revolve around managing the potentiometer, a variable resistor commonly used for input control or measurement purposes. 
@@ -115,27 +108,15 @@ The `Potentiometer_Init` function serves the purpose of initializing the potenti
 
 Meanwhile, `Potentiometer_Read` is responsible for actually reading the current value from the potentiometer. This function likely interacts with the ADC module to capture the analog voltage level produced by the potentiometer's wiper position and converts it into a digital value representing the potentiometer's position or setting. This reading can then be utilized within the system for various purposes, such as controlling parameters, adjusting settings, or providing feedback based on user input.
 
-#### `serial.c`
-To interact with the potentiometer, traditionally used for input control or measurement, `pot.c`’s functionalities have to be managed.
-
-To achieve this initiation purpose, `Potentiometer_Init`’s responsibility is usually expressed in terms of the timing when it sets up Analog-to-Digital Converter (ADC) module unlike other related functions. This is done to make sure that hardware will be ready for reading an anlaog signal from potentiometer and eventually change it into a numeric form which is more convenient for the microcontroller or any other system processing logic.
-
-On the other hand,`Potentiometer_Read` deals in actual measurement procedure of what current value a potentiometer holds as of the moment when called upon. During such an activity there might much interaction between this function and ADC module in order to capture an analog voltage level corresponding to the potentiometer wiper position before turning it into a digital value which represents the position or setting of a potentiometer itself. 
-
 #### `sweep_flag.c`
 `sweep_flag.c` is mainly concerned with controlling the status of the program, which describes the current state that the program is in. `ProgrammeStatus` is an important routine in this module responsible for accessing the program’s current status. The function probably reads internal variables or flags that show whether the program is in GREEN, RED, DETECTED or FINISHED state. Essentially, `ProgrammeStatus` provides information about the condition of the whole system so as other parts in it can adjust accordingly, synchronize their activities and properly manage its performance.
 
 #### `timer.c`
-The main goal of the `timer.c` file is to manage timing operations that are used while conducting some tasks at regular intervals requiring precised timings thus imperative to time-sensitive tasks such as LED blinking or coordinating system events. This module comprises of vital functions such as `timerInitialise` which is utilized during the initialization of timer functionality. Here, the function is likely configuring timer hardware by setting parameters like the time interval that should trigger it and also specifying which function is to be called every time it reaches that point.
-
-
-An additional important one is `TIM4_IRQHandler` which plays the lead role in timing operation this is an Interrupt Service Routine (ISR) which is associated with the hardware interrupt of the timer. It is this ISR that triggers when the timer reaches its set interval and ensures that the callback function is called swiftly.With proper management of timing issues within the context of the entire system, the purpose of `TIM4_IRQHandler` is to enable execution of tasks requiring a high degree of temporal precision (Fermi et al., 1976), which should be synchronized with the general operation of the system
-
+The main goal of the `timer.c` file is to manage timing operations that are used while conducting some tasks at regular intervals requiring precised timings thus imperative to time-sensitive tasks such as LED blinking or coordinating system events. This module comprises of vital functions such as `timerInitialise` which is utilized during the initialization of timer functionality. Here, the function is configuring timer hardware by setting parameters like the time interval that should trigger it and also specifying which function is to be called every time it reaches that point.
 
 ### User Instructions
 
 - Ensure that the STM32 definition files are included in the project. These files contain crucial definitions and are essential for the application to function correctly.
-
 - Set your serial communication to use a baud rate of 115200 for optimal performance to display if it is green or red.
 - Setup up the python code for your laptop.
 - Setup the STM32 with the potentiometer, lidar, pan tilt unit and buzzer (wiring for PTU commented in main.c).
