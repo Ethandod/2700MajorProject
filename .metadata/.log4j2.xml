@@ -2,7 +2,11 @@
 <Configuration status="info">
     <ThresholdFilter level="INFO"/>
     <Appenders>
+<<<<<<< HEAD
         <RollingFile name="DEBUGFILE" fileName="/Users/krish/Downloads/2700MajorProject/.metadata/.ide.log" filePattern="/Users/krish/Downloads/2700MajorProject/.metadata/.ide.log-%d{yyyy-MM-dd}.log">
+=======
+        <RollingFile name="DEBUGFILE" fileName="C:/Users/dodso/OneDrive/Desktop/GitHub/2700MajorProject/.metadata/.ide.log" filePattern="C:/Users/dodso/OneDrive/Desktop/GitHub/2700MajorProject/.metadata/.ide.log-%d{yyyy-MM-dd}.log">
+>>>>>>> sweeper
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss,SSS} [%p] %c{1}:%L - %m%n" />
             <Policies>
                 <TimeBasedTriggeringPolicy interval="1" modulate="true" />

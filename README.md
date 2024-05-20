@@ -15,7 +15,7 @@ Welcome to the MTRX 2700 repository!
 1. Jeremy Fox: Lidar and Pan tilt Modules
 2. Krish Singh: Potentiometer Module
 3. Ethan Dodson: Button Activation Module, Minutes and README
-4. Jono Tuite: Piezo Buzzer Module
+4. Jono Tuite: Piezo Buzzer Module and README
 5. Sean Sun: Timer, Serial and Button Deactivation Modules
 
 
@@ -38,7 +38,6 @@ This module handles the serial so that when a flag get's triggered it will be ei
   - `setLaptopRed`: The computer screen will turn red when this is flagged.
   - `checkStop`: Checks if the space bar has been pressed, if so it goes through the `laptopInterfaceInitialise` function and stops the whole game.
 
-
 #### `Serial.c`
 Primarily involved with interfacing between the system’s hardware capabilities and the application-level code, especially related to system call operations. 
 - **Key Functions:**
@@ -46,10 +45,11 @@ Primarily involved with interfacing between the system’s hardware capabilities
   - `serialTransmitString`: Sending the string either 'red' or 'green to the serial
 
 
+
+
 ### Piezo Buzzer Module:
 Handles the Piezo buzzer by setting in on using a button handler.
 #### `buzzer.c`
-It initializes the timer and sets up callbacks that are executed at regular intervals or for one-shot events based on timer configurations.
 - **Key Functions:**
   - `toggleBuzzer`: Toggles the buzzer on.
 
@@ -57,6 +57,7 @@ It initializes the timer and sets up callbacks that are executed at regular inte
 ### Potentiometer Module:
 It initializes the potentiometer and reads the value from the potentiometer which then is sent to a different module to change the speed of the game. 
 #### `pot.c`
+- **Key Functions:**
   - `Potentiometer_Init`: Initialize the potentiometer (starts the ADC)
   - `Potentiometer_Read`: Reads the value from the potentiometer
 

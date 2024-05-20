@@ -5,4 +5,8 @@ C:/GitHub/MTRX2700A2/stm32f303-definitions/Core/Inc/core_cm4.h:1816:22:__NVIC_Se
 ../Src/Serial.c:131:6:setTransmitInterrupt	2
 ../Src/Serial.c:142:6:serialReceiveCharacter	6
 ../Src/Serial.c:179:6:serialTransmitCharacter	4
+<<<<<<< HEAD
 ../Src/Serial.c:205:6:serialTransmitString	1
+=======
+../Src/Serial.c:204:6:serialTransmitString	1
+>>>>>>> sweeper

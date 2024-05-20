@@ -5,4 +5,8 @@ C:/GitHub/MTRX2700A2/stm32f303-definitions/Core/Inc/core_cm4.h:1816:22:__NVIC_Se
 ../Src/Serial.c:131:6:setTransmitInterrupt	16	static,ignoring_inline_asm
 ../Src/Serial.c:142:6:serialReceiveCharacter	24	static
 ../Src/Serial.c:179:6:serialTransmitCharacter	16	static
+<<<<<<< HEAD
 ../Src/Serial.c:205:6:serialTransmitString	16	static
+=======
+../Src/Serial.c:204:6:serialTransmitString	16	static
+>>>>>>> sweeper
