@@ -103,7 +103,7 @@ void setup_sweeper(I2C_HandleTypeDef *hi2c1, SPI_HandleTypeDef *hspi1, TIM_Handl
 
 }
 
-void sweep(uint16_t *previousReadings, uint16_t *output)
+void sweep(uint16_t *previousReadings, uint16_t *output, void (*callback)())
 {
 	uint16_t step_increment = DEGREES_PER_STEP * PWM_PER_DEGREE;
 	uint16_t starting_pwm = STARTING_OFFSET_HORI - (step_increment * READINGS_PER_SWEEP) / 2;
@@ -127,6 +127,7 @@ void sweep(uint16_t *previousReadings, uint16_t *output)
 
 	for(int i = 1; i < READINGS_PER_SWEEP; i++) // DO NOT CHANGE i TO 0, ITS A COCONUT.png situation
 	{
+		if (get_status() != RED) {return;}
 		current_pwm = starting_pwm + step_increment * i;
 
 		set_pan(current_pwm);
@@ -159,7 +160,7 @@ void sweep(uint16_t *previousReadings, uint16_t *output)
 		{
 			//SerialOutputString("Breach Limit Reached!!!\r\n", &USART1_PORT);
 
-			set_detected();
+			callback();
 			return;
 		}
 	}
@@ -374,7 +375,7 @@ void omni_sweep(uint8_t direction, uint16_t *previousReadings, uint16_t *output)
 
 }
 
-void sweep_routine()
+void sweep_routine(void (*callback)())
 {
 	uint16_t previousSet[READINGS_PER_SWEEP];
 	previousSet[0] = 0;
@@ -400,12 +401,12 @@ void sweep_routine()
 ////		*previousSet = &currentSet;
 //	}
 
-	sweep(NULL, &previousSet);
+	sweep(NULL, &previousSet, callback);
 
 
 	while (get_status() == RED)
 	{
-		sweep(&previousSet, &currentSet);
+		sweep(&previousSet, &currentSet, callback);
 		transfer_array_data(&currentSet, &previousSet, READINGS_PER_SWEEP);
 	}
 

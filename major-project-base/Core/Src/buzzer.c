@@ -20,8 +20,20 @@ void calcsin (int val)
 	}
 }
 
+uint32_t get_buzzer()
+{
+	return val;
+}
+
 void toggleBuzzer(DAC_HandleTypeDef hdac1){
-	val = 1 - val;
+	if (!val)
+	{
+		val = 1;
+	}
+	else
+	{
+		val = 0;
+	}
 
 	calcsin(val);
 	HAL_DAC_Start_DMA(&hdac1, DAC1_CHANNEL_1, sine_val, 100, DAC_ALIGN_12B_R);
