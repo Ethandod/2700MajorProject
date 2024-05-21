@@ -130,7 +130,7 @@ The main goal of the `timer.c` file is to manage timing operations that are used
 - Can have as many players as you would like.
 - When the computer screen is GREEN you can make your way to the laptop.
 - When the computer screen is RED the lidar will scan the room and if there is any movement the buzzer will go off and the laser pointer ontop of the lidar will be pointing at the person who has moved. They will be eliminated from the game.
-- Repeat the rpocess of the GREEN or RED screen until someone touches the space bar in which the screen will turn BLUE and that person is deemed the winenr of the game.
+- Repeat the process of the GREEN or RED screen until someone touches the space bar in which the screen will turn BLUE and that person is deemed the winenr of the game.
 
 ### Credits
 
