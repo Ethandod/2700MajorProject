@@ -11,7 +11,7 @@ uint32_t sine_val[100];
 
 #define PI 3.1415926
 
-
+//produces sine wave in the sin_val array (turns on or off based on val input)
 void calcsin (int val)
 {
 	for (int i=0; i<100; i++)
@@ -25,6 +25,7 @@ uint32_t get_buzzer()
 	return val;
 }
 
+//toggles whether the buzzer is on or off
 void toggleBuzzer(DAC_HandleTypeDef hdac1){
 	if (!val)
 	{
