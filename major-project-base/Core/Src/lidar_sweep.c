@@ -127,6 +127,7 @@ void sweep(uint16_t *previousReadings, uint16_t *output, void (*callback)())
 
 	for(int i = 1; i < READINGS_PER_SWEEP; i++) // DO NOT CHANGE i TO 0, ITS A COCONUT.png situation
 	{
+		if (get_status() != RED) {return;}
 		current_pwm = starting_pwm + step_increment * i;
 
 		set_pan(current_pwm);
