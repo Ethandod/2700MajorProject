@@ -55,7 +55,10 @@ DelayTIM DelayTIM4 = {
 	};
 
 void timerHandler(DelayTIM *delay_timer) {
+	// Clear the interrupt flag
     delay_timer->TIM->SR &= ~TIM_SR_UIF;
+
+	// Call the callback function and reset the timers as necessary
 	if (delay_timer->callback_ptr == NULL) {
 		stopTimer(delay_timer);
 		return;
@@ -116,6 +119,7 @@ uint32_t get_delay(DelayTIM *delay_timer)
 }
 
 void resetTimer(DelayTIM *delay_timer, uint32_t delay_ms) {
+	// Start the timer with the new delay
 	stopTimer(delay_timer);
     delay_timer->TIM->ARR = delay_ms;
 	delay_timer->TIM->CR1 |= TIM_CR1_CEN;
@@ -123,17 +127,20 @@ void resetTimer(DelayTIM *delay_timer, uint32_t delay_ms) {
 }
 
 void stopTimer(DelayTIM *delay_timer) {
+	// Stop the timer and reset the counter
 	delay_timer->TIM->CR1 &= ~TIM_CR1_CEN;
 	delay_timer->TIM->CNT = 0x00;
 }
 
 void setDelayLoop(DelayTIM *delay_timer, uint32_t delay_ms, void (*callback)(void)) {
+	// Set the timer to loop and reset the timer
 	delay_timer->callback_ptr = callback;
 	delay_timer->is_loop = true;
 	resetTimer(delay_timer, delay_ms);
 }
 
 void setDelay(DelayTIM *delay_timer, uint32_t delay_ms, void (*callback)(void)) {
+	// Set the timer to not loop and reset the timer
 	delay_timer->callback_ptr = callback;
 	delay_timer->is_loop = false;
 	resetTimer(delay_timer, delay_ms);

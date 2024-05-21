@@ -1,0 +1,6 @@
+../Core/Src/sweep_flag.c:5:22:get_status	1
+../Core/Src/sweep_flag.c:12:6:set_setup	1
+../Core/Src/sweep_flag.c:18:6:set_green	1
+../Core/Src/sweep_flag.c:24:6:set_red	1
+../Core/Src/sweep_flag.c:30:6:set_detected	1
+../Core/Src/sweep_flag.c:36:6:set_finished	1

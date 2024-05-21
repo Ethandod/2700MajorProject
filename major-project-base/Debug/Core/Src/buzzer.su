@@ -1,0 +1,3 @@
+../Core/Src/buzzer.c:15:6:calcsin	32	static
+../Core/Src/buzzer.c:23:10:get_buzzer	4	static
+../Core/Src/buzzer.c:28:6:toggleBuzzer	16	static
