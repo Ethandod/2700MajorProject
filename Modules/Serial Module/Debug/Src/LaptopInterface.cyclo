@@ -1,4 +1,11 @@
+<<<<<<< HEAD
 ../Src/LaptopInterface.c:9:6:checkStop	2
 ../Src/LaptopInterface.c:15:6:laptopInterfaceInitialise	1
 ../Src/LaptopInterface.c:20:6:setLaptopGreen	1
 ../Src/LaptopInterface.c:26:6:setLaptopRed	1
+=======
+../Src/LaptopInterface.c:12:6:checkStop	2
+../Src/LaptopInterface.c:18:6:laptopInterfaceInitialise	1
+../Src/LaptopInterface.c:23:6:setLaptopGreen	1
+../Src/LaptopInterface.c:28:6:setLaptopRed	1
+>>>>>>> sweeper

@@ -1,0 +1,3 @@
+../Core/Src/buzzer.c:15:6:calcsin	2
+../Core/Src/buzzer.c:23:10:get_buzzer	1
+../Core/Src/buzzer.c:28:6:toggleBuzzer	2
